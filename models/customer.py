@@ -5,7 +5,7 @@ class Customer(db.Model):
     __tablename__ = 'customers'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    customer_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
@@ -13,7 +13,7 @@ class Customer(db.Model):
 
 class CustomerSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name', 'email', 'password', 'is_admin')
+        fields = ('id', 'customer_name', 'email', 'password', 'is_admin')
 
 
 customer_schema = CustomerSchema(exclude=['password'])

@@ -15,6 +15,6 @@ class DogSchema(ma.Schema):
         fields = ('id', 'dog_name', 'size', 'breed')
 
 
-# dog_schema = DogSchema(exclude=['password'])
-# dogs_schema = DogSchema(many=True, exclude=['password'])
+dog_schema = DogSchema
+dogs_schema = DogSchema(many=True)
 

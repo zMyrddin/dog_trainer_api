@@ -8,7 +8,7 @@ class Trainer(db.Model):
     trainer_name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
-    skills = db.Column(db.String, nullable=False, unique=True)
+    skills = db.Column(db.String, nullable=False)
     
 
 class TrainerSchema(ma.Schema):

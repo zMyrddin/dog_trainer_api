@@ -21,28 +21,28 @@ def drop_all():
 def seed_db():
     customers = [
         Customer(
-            name='Dog Admin',
+            customer_name='Dog Admin',
             email='admin@dogtrainer.com',
             password=bcrypt.generate_password_hash('dogmaster').decode('utf-8'),
             is_admin=True
         ),
         Customer(
-            name='Poh Tato',
+            customer_name='Poh Tato',
             email='poh@tato.com',
             password=bcrypt.generate_password_hash('pohtato').decode('utf-8'),
         ),        
         Customer(
-            name='Pia Toes',
+            customer_name='Pia Toes',
             email='pia@toes.com',
             password=bcrypt.generate_password_hash('piatoes').decode('utf-8'),
         ),
         Customer(
-            name='Sam Song',
+            customer_name='Sam Song',
             email='sam@song.com',
             password=bcrypt.generate_password_hash('samsong').decode('utf-8'),
         ),        
         Customer(
-            name='Otto Man',
+            customer_name='Otto Man',
             email='otto@man.com',
             password=bcrypt.generate_password_hash('ottoman').decode('utf-8'),
         ),
@@ -122,7 +122,4 @@ def seed_db():
     db.session.commit()
 
     print("Tables Seeded")
-
- 
-
     

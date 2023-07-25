@@ -8,9 +8,9 @@ from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_register_bp = Blueprint('/auth/register', __name__, url_prefix='/auth/register')
 
-@auth_bp.route('/register/customer', methods=['POST'])
+@auth_register_bp.route('/customer', methods=['POST'])
 def auth_registercustomer():
     try:
 
@@ -42,7 +42,7 @@ def auth_registercustomer():
             error_message = f'The {column_name} is required'
         return {'error': error_message}, 409  
 
-@auth_bp.route('/register/trainer', methods=['POST'])
+@auth_register_bp.route('/trainer', methods=['POST'])
 def auth_registertrainer():
     try:
         body_data = request.get_json()
@@ -76,7 +76,7 @@ def auth_registertrainer():
         return {'error': error_message}, 409  
     
 
-@auth_bp.route('/register/dog', methods=['POST'])
+@auth_register_bp.route('/dog', methods=['POST'])
 def auth_registerdog():
     try:
         body_data = request.get_json()

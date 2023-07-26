@@ -2,7 +2,7 @@ from init import db, ma
 
 
 class Trainer(db.Model):
-    __tablename__ = 'trainers'
+    __tablename__ = 'trainer'
 
     id = db.Column(db.Integer, primary_key=True)
     trainer_name = db.Column(db.String, nullable=False)

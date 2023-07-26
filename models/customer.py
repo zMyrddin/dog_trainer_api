@@ -1,8 +1,9 @@
 from init import db, ma
+from marshmallow import fields
 
 
 class Customer(db.Model):
-    __tablename__ = 'customers'
+    __tablename__ = 'customer'
 
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String, nullable=False)
@@ -10,10 +11,14 @@ class Customer(db.Model):
     password = db.Column(db.String, nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
+    dogs = db.relationship('Dog', back_populates='customer', cascade='all, delete-orphan')
+
 
 class CustomerSchema(ma.Schema):
+    dogs = fields.List(fields.Nested('DogSchema', exclude=['customer']))
+
     class Meta:
-        fields = ('id', 'customer_name', 'email', 'password', 'is_admin')
+        fields = ('id', 'customer_name', 'email', 'password', 'is_admin', 'dogs')
 
 
 customer_schema = CustomerSchema(exclude=['password'])

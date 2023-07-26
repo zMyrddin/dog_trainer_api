@@ -17,7 +17,7 @@ def auth_registercustomer():
         body_data = request.get_json()
         
         customer = Customer() 
-        customer.customer_name = body_data.get('name')
+        customer.customer_name = body_data.get('customer_name')
         customer.email = body_data.get('email')
         customer.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
 
@@ -48,7 +48,7 @@ def auth_registertrainer():
         body_data = request.get_json()
         
         trainer = Trainer() 
-        trainer.trainer_name = body_data.get('name')
+        trainer.trainer_name = body_data.get('trainer_name')
         trainer.email = body_data.get('email')
         trainer.password = bcrypt.generate_password_hash(body_data.get('password')).decode('utf-8')
         trainer.skills = body_data.get('skills')
@@ -76,33 +76,30 @@ def auth_registertrainer():
         return {'error': error_message}, 409  
     
 
-@auth_register_bp.route('/dog', methods=['POST'])
-def auth_registerdog():
-    try:
-        body_data = request.get_json()
+# @auth_register_bp.route('/dog', methods=['POST'])
+# def auth_registerdog():
+#     try:
+#         body_data = request.get_json()
         
-        dog = Dog() 
-        dog.dog_name = body_data.get('name')
-        dog.size = body_data.get('size')
-        dog.breed = body_data.get('breed')
+#         dog = Dog() 
+#         dog.dog_name = body_data.get('dog_name')
+#         dog.size = body_data.get('size')
+#         dog.breed = body_data.get('breed')
         
 
-        db.session.add(dog)
+#         db.session.add(dog)
 
-        db.session.commit()
+#         db.session.commit()
 
-        return {'message': f'New dog {dog.dog_name} added successfully.'}, 201
-    except IntegrityError as err:
-        if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
-            custom_messages = {
-            'dog_name': 'Dog Name is required',
-            'customer_name': 'Owner Name is required',
-            }
-            # Get the column name from the exception
-        column_name = err.orig.diag.column_name
-        # Retrieve the custom error message if the column_name is found in the custom_messages dictionary
-        error_message = custom_messages.get(column_name)
-        # If not found, use a default error message
-        if not error_message:
-            error_message = f'The {column_name} is required'
-        return {'error': error_message}, 409
+#         return {'message': f'New dog {dog.dog_name} added successfully.'}, 201
+#     except IntegrityError as err:
+#         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
+#             custom_messages = {
+#             'dog_name': 'Dog Name is required',
+#             'customer_name': 'Owner Name is required',
+#             }
+#         column_name = err.orig.diag.column_name
+#         error_message = custom_messages.get(column_name)
+#         if not error_message:
+#             error_message = f'The {column_name} is required'
+#         return {'error': error_message}, 409

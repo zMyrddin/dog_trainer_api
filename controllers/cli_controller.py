@@ -45,8 +45,13 @@ def seed_db():
             customer_name='Otto Man',
             email='otto@man.com',
             password=bcrypt.generate_password_hash('ottoman').decode('utf-8'),
-        ),
+        )
     ]
+
+
+    db.session.add_all(customers)
+
+
     trainers = [
         Trainer(
             trainer_name='Sitmaster Alex',
@@ -107,17 +112,41 @@ def seed_db():
             email='playjack@dogtrainer.com',
             password=bcrypt.generate_password_hash('playmaster').decode('utf-8'),
             skills='Play'
-        ),        
+        )        
     ]
+
+
+    db.session.add_all(trainers)
+    
+
     dogs = [
         Dog(
-            dog_name='Rambo',
-
+            dog_name='Fries',
+            size='Large',
+            breed='Doberman',
+            customer=customers[1]  # Start indexing from 1 to skip the 'admin' customer
+        ),
+        Dog(
+            dog_name='Chips',
+            size='Medium',
+            breed='Shiba Inu',
+            customer=customers[2]
+        ),
+        Dog(
+            dog_name='Galaxy',
+            size='Small',
+            breed='Shih Tzu',
+            customer=customers[3]
+        ),
+        Dog(
+            dog_name='Couch',
+            size='Large',
+            breed='Chow Chow',
+            customer=customers[4]
         )
     ]
 
-    db.session.add_all(customers)
-    db.session.add_all(trainers)
+
     db.session.add_all(dogs)
     db.session.commit()
 

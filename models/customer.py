@@ -3,7 +3,7 @@ from marshmallow import fields
 
 
 class Customer(db.Model):
-    __tablename__ = 'customer'
+    __tablename__ = 'customers'
 
     id = db.Column(db.Integer, primary_key=True)
     customer_name = db.Column(db.String, nullable=False)

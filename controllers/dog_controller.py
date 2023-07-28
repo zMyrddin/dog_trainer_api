@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 
 
-dog_bp = Blueprint('dog', __name__, url_prefix='/dog')
+dog_bp = Blueprint('dogs', __name__, url_prefix='/dog')
 
 @dog_bp.route('/')
 def get_all_dogs():
@@ -56,3 +56,18 @@ def add_dog():
         if not error_message:
             error_message = f'The {column_name} is required'
         return {'error': error_message}, 409
+    
+
+@dog_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
+def remove_one_dog(id):
+    stmt = db.select(Dog).filter_by(id=id)
+    dog = db.session.scalar(stmt)
+    if dog:
+        db.session.delete(dog)
+        db.session.commit()
+        return {'message':f'{dog.dog_name} has been removed'}
+    else:
+        return{'error':f'Dog with id {id} not found in the system'}, 404
+
+

@@ -5,7 +5,7 @@ from models.customer import Customer, customer_schema, customers_schema
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 
-customer_bp = Blueprint('customer', __name__, url_prefix='/customer')
+customer_bp = Blueprint('customers', __name__, url_prefix='/customer')
 
 @customer_bp.route('/')
 def get_all_customers():

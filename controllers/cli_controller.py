@@ -3,6 +3,7 @@ from init import db, bcrypt
 from models.customer import Customer
 from models.trainer import Trainer
 from models.dog import Dog
+from models.course import Course
 
 db_commands = Blueprint('db', __name__)
 
@@ -51,13 +52,29 @@ def seed_db():
 
     db.session.add_all(customers)
 
+    courses = [
+        Course(
+            course_name='Sit',
+            # trainer=trainers[0],
+            # dog=dogs[0]
+        ),
+        Course(
+            course_name='Bang',
+            # trainer=trainers[2],
+            # dog=dogs[3]
+        ),
+    ]
+
+    db.session.add_all(courses)
+
 
     trainers = [
         Trainer(
             trainer_name='Sitmaster Alex',
             email='sitalex@dogtrainer.com',
             password=bcrypt.generate_password_hash('sitmaster').decode('utf-8'),
-            skills='Sit'
+            skills='Sit',
+            courses=courses[0]
         ),
         Trainer(
             trainer_name='Rollmaster Brad',
@@ -69,7 +86,8 @@ def seed_db():
             trainer_name='Bangmaster Chad',
             email='bangchad@dogtrainer.com',
             password=bcrypt.generate_password_hash('bangmaster').decode('utf-8'),
-            skills='Bang'
+            skills='Bang',
+            courses=courses[1]
         ),
         Trainer(
             trainer_name='Standmaster Daniel',
@@ -146,8 +164,10 @@ def seed_db():
         )
     ]
 
-
     db.session.add_all(dogs)
+
+
+
     db.session.commit()
 
     print("Tables Seeded")

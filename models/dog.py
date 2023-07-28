@@ -189,23 +189,32 @@ from marshmallow import fields
 # )
 
 class Dog(db.Model):
-    __tablename__ = 'dog'
+    __tablename__ = 'dogs'
 
     id = db.Column(db.Integer, primary_key=True)
     dog_name = db.Column(db.String, nullable=False)
     size = db.Column(db.String)
     breed = db.Column(db.String)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable = False)
+
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id')
+                            , nullable=False
+                            )
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id')
+                          , nullable=False
+                          )
 
     customer = db.relationship('Customer', back_populates='dogs')
+    course = db.relationship('Course', back_populates='dogs', foreign_keys='Dog.course_id', cascade='all, delete-orphan', single_parent=True)
+
 
 
 
 class DogSchema(ma.Schema):
     customer = fields.Nested('CustomerSchema', only=['customer_name', 'email'])
+    course = fields.Nested('CourseSchema', only=['course_name'])
 
     class Meta:
-        fields = ('id', 'dog_name', 'size', 'breed', 'customer')
+        fields = ('id', 'dog_name', 'size', 'breed', 'customer', 'course')
         ordered = True
 
 

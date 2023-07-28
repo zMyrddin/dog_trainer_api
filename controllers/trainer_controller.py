@@ -1,11 +1,12 @@
 from flask import Blueprint, request
 from init import db
 from models.trainer import Trainer, trainer_schema, trainers_schema
+from models.course import Course, course_schema, courses_schema
 # from datetime import date
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 
-trainer_bp = Blueprint('trainer', __name__, url_prefix='/trainer')
+trainer_bp = Blueprint('trainers', __name__, url_prefix='/trainer')
 
 @trainer_bp.route('/')
 def get_all_trainers():

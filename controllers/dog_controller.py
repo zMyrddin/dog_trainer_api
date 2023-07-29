@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from init import db
 from models.dog import Dog, dog_schema, dogs_schema
 from models.customer import Customer
+from controllers.function_controller import authorise_as_admin
 # from datetime import date
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from sqlalchemy.exc import IntegrityError
@@ -9,6 +10,7 @@ from psycopg2 import errorcodes
 
 
 dog_bp = Blueprint('dog', __name__, url_prefix='/dog')
+
 
 @dog_bp.route('/')
 def get_all_dogs():
@@ -32,19 +34,19 @@ def get_one_dog(id):
 def add_dog():
     try:
         body_data = request.get_json()
-        
+   
         dog = Dog() 
         dog.dog_name = body_data.get('dog_name')
         dog.size = body_data.get('size')
         dog.breed = body_data.get('breed')
-        dog.customer_id=get_jwt_identity()
+        dog.customer_id = get_jwt_identity()
         
         db.session.add(dog)
 
         db.session.commit()
 
         return {'message': f'New dog {dog.dog_name} added successfully.'}, 201
-    
+        
     except IntegrityError as err:
         if err.orig.pgcode == errorcodes.NOT_NULL_VIOLATION:
             custom_messages = {
@@ -56,3 +58,6 @@ def add_dog():
         if not error_message:
             error_message = f'The {column_name} is required'
         return {'error': error_message}, 409
+    
+
+    

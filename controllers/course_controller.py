@@ -3,7 +3,8 @@ from init import db
 from models.course import Course, course_schema, courses_schema
 from models.trainer import Trainer
 from models.dog import Dog
-from flask_jwt_extended import jwt_required
+from controllers.function_controller import authorise_as_admin
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 course_bp = Blueprint('course', __name__, url_prefix='/course')
 
@@ -24,30 +25,41 @@ def get_one_course(id):
 
 @course_bp.route('/create', methods=['POST'])
 @jwt_required()
+@authorise_as_admin
 def add_course():
     body_data = request.get_json()
     course = Course()
     course.trainer_id = body_data.get('trainer_id')
     course.dog_id = body_data.get('dog_id')
-    course_name = body_data.get('course_name')
+    course.course_name = body_data.get('course_name')
 
-    # # Check if the trainer with given ID exists
-    trainer = Trainer.query.get(trainer_id)
+    # Check if both the trainer and the dog with given IDs exist
+    trainer = Trainer.query.get(course.trainer_id)
+    dog = Dog.query.get(course.dog_id)
+
+    errors = {}
+
     if not trainer:
-        return {'error': f'Trainer not found with id {trainer_id}'}, 404
+        errors['trainer_error'] = f'Trainer not found with id {course.trainer_id}'
 
-    # # Check if the dog with given ID exists
-    dog = Dog.query.get(dog_id)
     if not dog:
-        return {'error': f'Dog not found with id {dog_id}'}, 404
+        errors['dog_error'] = f'Dog not found with id {course.dog_id}'
 
+    # If both trainer and dog are not found, return the errors
+    if errors:
+        return {'errors': errors}, 404
+
+    # Both trainer and dog exist, add the course to the database
     db.session.add(course)
     db.session.commit()
 
-    return {'message': f'Course {course_name} added successfully.'}, 201
+    return {'message': 'Course created successfully.', 'course_id': course.id}, 201
+
+
 
 @course_bp.route('/create/courseonly', methods=['POST'])
 @jwt_required()
+@authorise_as_admin
 def add_courseonly():
     body_data = request.get_json()
     course = Course()
@@ -60,6 +72,7 @@ def add_courseonly():
 
 @course_bp.route('/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
+@authorise_as_admin
 def delete_course(id):
     course = Course.query.get(id)
     if course:

@@ -3,9 +3,9 @@ from init import db, bcrypt
 from models.customer import Customer, customer_schema, customers_schema
 from models.trainer import Trainer, trainer_schema, trainers_schema
 from models.dog import Dog, dog_schema, dogs_schema
-from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
+from controllers.function_controller import authorise_as_admin
 
 
 auth_register_bp = Blueprint('/auth/register', __name__, url_prefix='/auth/register')
@@ -43,6 +43,7 @@ def auth_registercustomer():
         return {'error': error_message}, 409  
 
 @auth_register_bp.route('/trainer', methods=['POST'])
+@authorise_as_admin
 def auth_registertrainer():
     try:
         body_data = request.get_json()

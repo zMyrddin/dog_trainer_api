@@ -22,7 +22,7 @@ def drop_all():
 def seed_db():
     customers = [
         Customer(
-            customer_name='Dog Admin',
+            customer_name='dog_admin',
             email='admin@dogtrainer.com',
             password=bcrypt.generate_password_hash('dogmaster').decode('utf-8'),
             is_admin=True

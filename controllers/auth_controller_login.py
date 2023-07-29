@@ -20,3 +20,14 @@ def auth_logincustomer():
         return { 'email': customer.email, 'token': token, 'is_admin': customer.is_admin }
     else:
         return { 'error': 'Invalid email or password' }, 401
+    
+@auth_login_bp.route('/trainer', methods=['POST'])
+def auth_logintrainer():
+    body_data = request.get_json()
+    stmt = db.select(Trainer).filter_by(email=body_data.get('email'))
+    trainer = db.session.scalar(stmt)
+    if trainer and bcrypt.check_password_hash(trainer.password, body_data.get('password')):
+        token = create_access_token(identity=str(trainer.id), expires_delta=timedelta(days=1))
+        return { 'email': trainer.email, 'token': token}
+    else:
+        return { 'error': 'Invalid email or password' }, 401

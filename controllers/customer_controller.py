@@ -1,8 +1,10 @@
 from flask import Blueprint, request
 from init import db
 from models.customer import Customer, customer_schema, customers_schema
+from controllers.function_controller import authorise_as_admin
 # from datetime import date
 from flask_jwt_extended import get_jwt_identity, jwt_required
+
 
 
 customer_bp = Blueprint('customer', __name__, url_prefix='/customer')

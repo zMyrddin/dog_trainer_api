@@ -1,6 +1,7 @@
 from flask import Blueprint, request
 from init import db
 from models.trainer import Trainer, trainer_schema, trainers_schema
+from controllers.function_controller import authorise_as_admin
 # from datetime import date
 from flask_jwt_extended import get_jwt_identity, jwt_required
 

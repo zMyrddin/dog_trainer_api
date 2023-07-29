@@ -1,5 +1,7 @@
 from init import db, ma
 from marshmallow import fields
+from marshmallow.validate import Length, And, Regexp, OneOf
+from marshmallow.exceptions import ValidationError
 
 
 class Customer(db.Model):
@@ -15,14 +17,17 @@ class Customer(db.Model):
 
 
 class CustomerSchema(ma.Schema):
-    password = fields.String(required=True, load_only=True)
-    
+    password = fields.String(required=True, load_only=True)  
+    customer_name = fields.String(required=True, validate=And(
+        Length(min=2, error='Name must be at least 2 characters long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='Only letters, spaces and numbers are allowed')))
     dogs = fields.List(fields.Nested('DogSchema', exclude=['customer']))
 
     class Meta:
         fields = ('id', 'customer_name', 'email', 'password', 'is_admin', 'dogs')
 
 
-customer_schema = CustomerSchema(exclude=['password'])
-customers_schema = CustomerSchema(many=True, exclude=['password'])
+
+customer_schema = CustomerSchema()
+customers_schema = CustomerSchema(many=True)
 

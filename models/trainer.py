@@ -1,5 +1,7 @@
 from init import db, ma
 from marshmallow import fields
+from marshmallow.validate import Length, And, Regexp, OneOf
+from marshmallow.exceptions import ValidationError
 
 
 class Trainer(db.Model):
@@ -15,12 +17,15 @@ class Trainer(db.Model):
 
 class TrainerSchema(ma.Schema):
     courses = fields.List(fields.Nested('CourseSchema'))
-    password = fields.Str(required=False)
+    trainer_name = fields.String(required=True, validate=And(
+        Length(min=2, error='Name must be at least 2 characters long'),
+        Regexp('^[a-zA-Z0-9 ]+$', error='Only letters, spaces and numbers are allowed')))
+    password = fields.Str(required=False, load_only=True)
 
     class Meta:
         fields = ('id', 'trainer_name', 'email', 'password', 'skills', 'courses')
 
-trainer_schema_for_update = TrainerSchema()
-trainer_schema = TrainerSchema(exclude=['password'])
-trainers_schema = TrainerSchema(many=True, exclude=['password'])
+
+trainer_schema = TrainerSchema()
+trainers_schema = TrainerSchema(many=True)
 

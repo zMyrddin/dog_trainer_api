@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from init import db, bcrypt
-from models.trainer import Trainer, trainer_schema, trainers_schema, trainer_schema_for_update
+from models.trainer import Trainer, trainer_schema, trainers_schema
 from controllers.function_controller import authorise_as_admin
 # from datetime import date
 from flask_jwt_extended import get_jwt_identity, jwt_required
@@ -28,11 +28,10 @@ def get_one_trainer(id):
 @jwt_required()
 @authorise_as_admin
 def update_trainer(id):
-    body_data = trainer_schema_for_update.load(request.get_json(), partial=True)
+    body_data = trainer_schema.load(request.get_json(), partial=True)
     stmt = db.select(Trainer).filter_by(id=id)
     trainer = db.session.scalar(stmt)
     if trainer:
-        # Update trainer_name if provided, otherwise keep the current value
         trainer.trainer_name = body_data.get('trainer_name', trainer.trainer_name)
         trainer.email = body_data.get('email', trainer.email)
 
@@ -41,7 +40,6 @@ def update_trainer(id):
         if new_password:
             trainer.password = bcrypt.generate_password_hash(new_password)
 
-        # Update skills if provided, otherwise keep the current value
         trainer.skills = body_data.get('skills', trainer.skills)
 
         db.session.commit()

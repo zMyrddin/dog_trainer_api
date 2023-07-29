@@ -15,7 +15,7 @@ auth_register_bp = Blueprint('/auth/register', __name__, url_prefix='/auth/regis
 def auth_registercustomer():
     try:
 
-        body_data = request.get_json()
+        body_data = customer_schema.load(request.get_json())
         
         customer = Customer() 
         customer.customer_name = body_data.get('customer_name')

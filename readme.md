@@ -4,7 +4,7 @@ Basically this app will try to solve a dog owner's issue of finding the right tr
 
 ### R2 - Why is it a problem that needs solving?
 
-Well honestly there are a lot of Trainers out there that don't have the required skills. So this coul save up everyones time by laying it out there. People could just reference to this and go "oh, i dont need to check multiple sources of a trainers skills because I could look for it here from one source"
+Well honestly there are a lot of Trainers out there that don't have the required skills. So this could save up everyone's time by laying it out there. People could just reference to this and go "oh, i dont need to check multiple sources of a trainers skills because I could look for it here from one source"
 
 ### R3 - Why have you chosen this database system. What are the drawbacks compared to others?
 

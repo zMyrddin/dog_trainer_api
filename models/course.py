@@ -1,7 +1,7 @@
 from init import db, ma
 from marshmallow import fields
-from models.trainer import Trainer
-from models.dog import Dog
+from models.trainer import Trainer, trainer_schema, trainers_schema
+from models.dog import Dog, dog_schema, dogs_schema
 
 class Course(db.Model):
     __tablename__ = 'course'
@@ -20,7 +20,7 @@ class CourseSchema(ma.Schema):
     dog = fields.Nested('DogSchema', only=['id', 'dog_name'], required = False)
 
     class Meta:
-        fields = ('id', 'course_name', 'trainer', 'dog')
+        fields = ('id', 'course_name', 'trainer_id', 'dog_id', 'trainer', 'dog')
         ordered = True
 
 

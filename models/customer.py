@@ -15,6 +15,8 @@ class Customer(db.Model):
 
 
 class CustomerSchema(ma.Schema):
+    password = fields.String(required=True, load_only=True)
+    
     dogs = fields.List(fields.Nested('DogSchema', exclude=['customer']))
 
     class Meta:

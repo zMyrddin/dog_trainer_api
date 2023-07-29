@@ -6,6 +6,7 @@ from models.dog import Dog, dog_schema, dogs_schema
 from sqlalchemy.exc import IntegrityError
 from psycopg2 import errorcodes
 from controllers.function_controller import authorise_as_admin
+from flask_jwt_extended import jwt_required
 
 
 auth_register_bp = Blueprint('/auth/register', __name__, url_prefix='/auth/register')
@@ -43,6 +44,7 @@ def auth_registercustomer():
         return {'error': error_message}, 409  
 
 @auth_register_bp.route('/trainer', methods=['POST'])
+@jwt_required()
 @authorise_as_admin
 def auth_registertrainer():
     try:

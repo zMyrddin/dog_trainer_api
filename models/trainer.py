@@ -15,12 +15,12 @@ class Trainer(db.Model):
 
 class TrainerSchema(ma.Schema):
     courses = fields.List(fields.Nested('CourseSchema'))
-
+    password = fields.Str(required=False)
 
     class Meta:
         fields = ('id', 'trainer_name', 'email', 'password', 'skills', 'courses')
 
-
+trainer_schema_for_update = TrainerSchema()
 trainer_schema = TrainerSchema(exclude=['password'])
 trainers_schema = TrainerSchema(many=True, exclude=['password'])
 

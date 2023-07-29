@@ -7,6 +7,7 @@ from controllers.auth_controller_login import auth_login_bp
 from controllers.customer_controller import customer_bp
 from controllers.dog_controller import dog_bp
 from controllers.trainer_controller import trainer_bp
+from controllers.course_controller import course_bp
 
 
 def create_app():
@@ -26,5 +27,6 @@ def create_app():
     app.register_blueprint(customer_bp)
     app.register_blueprint(dog_bp)
     app.register_blueprint(trainer_bp)
+    app.register_blueprint(course_bp)
 
     return app

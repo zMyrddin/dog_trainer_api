@@ -198,14 +198,16 @@ class Dog(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable = False)
 
     customer = db.relationship('Customer', back_populates='dogs')
-
-
+    
+    course = db.relationship('Course', back_populates='dog')
+    
 
 class DogSchema(ma.Schema):
     customer = fields.Nested('CustomerSchema', only=['customer_name', 'email'])
-
+    courses = fields.List(fields.Nested('CourseSchema'))
+    
     class Meta:
-        fields = ('id', 'dog_name', 'size', 'breed', 'customer')
+        fields = ('id', 'dog_name', 'size', 'breed', 'customer', 'courses')
         ordered = True
 
 

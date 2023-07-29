@@ -1,4 +1,5 @@
 from init import db, ma
+from marshmallow import fields
 
 
 class Trainer(db.Model):
@@ -10,10 +11,14 @@ class Trainer(db.Model):
     password = db.Column(db.String, nullable=False)
     skills = db.Column(db.String, nullable=False)
     
+    courses = db.relationship('Course', back_populates='trainer')
 
 class TrainerSchema(ma.Schema):
+    courses = fields.List(fields.Nested('CourseSchema'))
+
+
     class Meta:
-        fields = ('id', 'trainer_name', 'email', 'password', 'skills')
+        fields = ('id', 'trainer_name', 'email', 'password', 'skills', 'courses')
 
 
 trainer_schema = TrainerSchema(exclude=['password'])

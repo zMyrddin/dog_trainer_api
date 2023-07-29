@@ -32,17 +32,15 @@ def add_course():
     course_name = body_data.get('course_name')
 
     # # Check if the trainer with given ID exists
-    # trainer = Trainer.query.get(trainer_id)
-    # if not trainer:
-    #     return {'error': f'Trainer not found with id {trainer_id}'}, 404
+    trainer = Trainer.query.get(trainer_id)
+    if not trainer:
+        return {'error': f'Trainer not found with id {trainer_id}'}, 404
 
     # # Check if the dog with given ID exists
-    # dog = Dog.query.get(dog_id)
-    # if not dog:
-    #     return {'error': f'Dog not found with id {dog_id}'}, 404
+    dog = Dog.query.get(dog_id)
+    if not dog:
+        return {'error': f'Dog not found with id {dog_id}'}, 404
 
-    # Create and add the course to the database
-    # course = Course(course_name=course_name, trainer_id=trainer_id, dog_id=dog_id)
     db.session.add(course)
     db.session.commit()
 

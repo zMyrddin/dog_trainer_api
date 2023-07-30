@@ -6,20 +6,22 @@ from models.dog import Dog
 from models.course import Course
 
 db_commands = Blueprint('db', __name__)
-
+# Create all tables
 @db_commands.cli.command('create')
 def create_all():
     db.create_all()
     print('Tables Created')
 
+# Drop all Tables
 @db_commands.cli.command('drop')
 def drop_all():
     db.drop_all()
     print('Tables Dropped')
 
-
+# Seed all tables
 @db_commands.cli.command('seed')
 def seed_db():
+    # Seed info for customers
     customers = [
         Customer(
             customer_name='dog_admin',
@@ -49,10 +51,10 @@ def seed_db():
         )
     ]
 
-
+    # Adds the customers to the session
     db.session.add_all(customers)
 
-
+    # Seed info for trainers
     trainers = [
         Trainer(
             trainer_name='Sitmaster Alex',
@@ -116,10 +118,10 @@ def seed_db():
         )        
     ]
 
-
+    # Adds the trainers to the session
     db.session.add_all(trainers)
     
-
+    # Seed info for dogs
     dogs = [
         Dog(
             dog_name='Fries',
@@ -147,9 +149,10 @@ def seed_db():
         )
     ]
 
-
+    # Adds the dogs to the session
     db.session.add_all(dogs)
 
+    # Seed info for courses
     courses = [
         Course(
             course_name='Sit Course',
@@ -169,10 +172,11 @@ def seed_db():
         # Add more courses if needed
     ]
 
+    # Adds the courses to the session
     db.session.add_all(courses)
 
 
-
+    # Commits the seed info to the tables
     db.session.commit()
 
     print("Tables Seeded")

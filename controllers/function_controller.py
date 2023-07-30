@@ -6,6 +6,7 @@ from models.dog import Dog
 from models.trainer import Trainer
 from models.course import Course
 
+# This just saves the authorise as admin function in this file to be called on by different files. So that it doesn't repeat in every py file.
 def authorise_as_admin(fn):
     @functools.wraps(fn)
     def wrapper(*args, **kwargs):

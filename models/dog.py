@@ -3,6 +3,7 @@ from marshmallow import fields, validates
 from marshmallow.validate import Length, And, Regexp, OneOf
 from marshmallow.exceptions import ValidationError
 
+# This will be the reference point on Valid breeds only. 
 VALID_BREEDS = (
     'Affenpinscher',
     'Afghan Hound',
@@ -189,6 +190,7 @@ VALID_BREEDS = (
     'Yorkshire Terrier'
 )
 
+# This will be the reference point on Valid sizes only. 
 VALID_SIZES = (
     'Small',
     'Medium',
@@ -214,13 +216,15 @@ class DogSchema(ma.Schema):
     customer = fields.Nested('CustomerSchema', only=['customer_name', 'email'])
     courses = fields.List(fields.Nested('CourseSchema'))
     
+    # This function will validate the info provided when creating/updating a dog's info with regards to it's breed. This will only accept information if it is in the list above.
     @validates('breed')
     def validate_breed(self, value):
         if value not in VALID_BREEDS:
             raise ValidationError(f'Invalid breed. Must be one of: {", ".join(VALID_BREEDS)} or talk to an admin to add the breed if it is valid')
     
+     # This function will validate the info provided when creating/updating a dog's info with regards to it's size. This will only accept information if it is in the list above.
     @validates('size')
-    def validate_breed(self, value):
+    def validate_size(self, value):
         if value not in VALID_SIZES:
             raise ValidationError(f'Invalid size. Must be one of: {", ".join(VALID_SIZES)}')
         

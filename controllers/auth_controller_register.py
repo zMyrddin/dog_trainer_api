@@ -11,6 +11,7 @@ from flask_jwt_extended import jwt_required
 
 auth_register_bp = Blueprint('/auth/register', __name__, url_prefix='/auth/register')
 
+# registration route for new customers
 @auth_register_bp.route('/customer', methods=['POST'])
 def auth_registercustomer():
     try:
@@ -43,6 +44,8 @@ def auth_registercustomer():
             error_message = f'The {column_name} is required'
         return {'error': error_message}, 409  
 
+
+# Registration route for new trainers. This can only be done by admins as they will be interviewing trainers or be tasked to do this by the owners.
 @auth_register_bp.route('/trainer', methods=['POST'])
 @jwt_required()
 @authorise_as_admin
@@ -78,7 +81,7 @@ def auth_registertrainer():
             error_message = f'The {column_name} is required'
         return {'error': error_message}, 409  
     
-
+#  The dog registration route has been moved to the dog controller via a login done by a customer.
 # @auth_register_bp.route('/dog', methods=['POST'])
 # def auth_registerdog():
 #     try:

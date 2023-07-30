@@ -10,6 +10,7 @@ from datetime import timedelta
 
 auth_login_bp = Blueprint('/auth/login', __name__, url_prefix='/auth/login')
 
+# Login route for customers
 @auth_login_bp.route('/customer', methods=['POST'])
 def auth_logincustomer():
     body_data = request.get_json()
@@ -20,7 +21,8 @@ def auth_logincustomer():
         return { 'email': customer.email, 'token': token, 'is_admin': customer.is_admin }
     else:
         return { 'error': 'Invalid email or password' }, 401
-    
+
+# Login route potentially for trainers - will be a future update.    
 @auth_login_bp.route('/trainer', methods=['POST'])
 def auth_logintrainer():
     body_data = request.get_json()

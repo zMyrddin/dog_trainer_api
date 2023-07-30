@@ -11,13 +11,15 @@ from psycopg2 import errorcodes
 
 dog_bp = Blueprint('dog', __name__, url_prefix='/dog')
 
-
+# This route gets all the dogs info oin the db.
 @dog_bp.route('/')
 def get_all_dogs():
     stmt = db.select(Dog)
     dogs = db.session.scalars(stmt)
     return dogs_schema.dump(dogs)
 
+
+# gets a specific dog in the db via it's ID
 @dog_bp.route('/<int:id>')
 def get_one_dog(id):
     stmt = db.select(Dog).filter_by(id=id)
@@ -28,7 +30,7 @@ def get_one_dog(id):
         return {'error': f'Dog not found with id {id}'}, 404
     
 
-
+# This creates a new dog in the db. It will take in the login details of the customer and uses that info to add to it's customer ID. A customer can only do this for his own dog and he cant create or add a dog for others as it is dependent on their login id.
 @dog_bp.route('/new', methods=['POST'])
 @jwt_required()
 def add_dog():
@@ -60,6 +62,7 @@ def add_dog():
         return {'error': error_message}, 409
     
 
+# This updates a specifc Dog's info in the db via it's ID.
 @dog_bp.route('/update/<int:id>', methods=['PUT','PATCH'])
 @jwt_required()
 @authorise_as_admin
@@ -76,7 +79,7 @@ def update_dog(id):
     else:
         return {'error': f'Dog with ID: {id} does not exist or has already been deleted'}, 404     
 
-
+# This route delets a specific dog in the DB via its ID and can only be done by an admin.
 @dog_bp.route('/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
 @authorise_as_admin

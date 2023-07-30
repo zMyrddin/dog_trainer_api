@@ -8,12 +8,14 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 trainer_bp = Blueprint('trainer', __name__, url_prefix='/trainer')
 
+# This route gets all trainers in the DB
 @trainer_bp.route('/')
 def get_all_trainers():
     stmt = db.select(Trainer)
     trainers = db.session.scalars(stmt)
     return trainers_schema.dump(trainers)
 
+# This route gets one specific trainer via their ID in the DB
 @trainer_bp.route('/<int:id>')
 def get_one_trainer(id):
     stmt = db.select(Trainer).filter_by(id=id)
@@ -23,7 +25,7 @@ def get_one_trainer(id):
     else:
         return {'error': f'Trainer not found with id {id}'}, 404
     
-
+# This route updates a specific trainer. It can take in partial info as well so that it could update partial info. will save the past data if it isn't present in the update. This can only be done by an admin.
 @trainer_bp.route('/update/<int:id>', methods=['PUT','PATCH'])
 @jwt_required()
 @authorise_as_admin
@@ -47,7 +49,7 @@ def update_trainer(id):
     else:
         return {'error': f'Trainer with ID: {id} does not exist or has already been deleted'}, 404    
 
-
+# This is the delete route for trainers. This can only be done by an admin and will delete a trainer from the db via a specific ID.
 @trainer_bp.route('/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
 @authorise_as_admin

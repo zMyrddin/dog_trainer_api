@@ -8,12 +8,14 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 
 course_bp = Blueprint('course', __name__, url_prefix='/course')
 
+# Gets all courses in the table
 @course_bp.route('/', methods=['GET'])
 def get_all_courses():
     stmt = db.select(Course)
     courses = db.session.scalars(stmt)
     return courses_schema.dump(courses)
 
+# Gets only one course via the course id
 @course_bp.route('/<int:id>')
 def get_one_course(id):
     stmt = db.select(Course).filter_by(id=id)
@@ -23,6 +25,7 @@ def get_one_course(id):
     else:
         return {'error': f'Course not found with id {id}'}, 404
 
+# This route creates a new course but only an admin can do so. If there's a missing trainer or dog, it would still take in info and can be updated later.
 @course_bp.route('/create', methods=['POST'])
 @jwt_required()
 @authorise_as_admin
@@ -56,7 +59,7 @@ def add_course():
     return {'message': 'Course created successfully.', 'course_id': course.id}, 201
 
 
-
+# This route creates a course only. However, the updated course route above could already manage this.
 @course_bp.route('/create/courseonly', methods=['POST'])
 @jwt_required()
 @authorise_as_admin
@@ -71,6 +74,7 @@ def add_courseonly():
     return {'message': f'Course {course.course_name} added successfully.'}, 201
 
 
+# This route updates the specific course ID which can only be done by an admin.
 @course_bp.route('/update/<int:id>', methods=['PUT','PATCH'])
 @jwt_required()
 @authorise_as_admin
@@ -88,6 +92,7 @@ def update_course(id):
         return {'error': f'Course with ID: {id} does not exist or has already been deleted'}, 404     
 
 
+# This route deletes a course via it's specific ID. 
 @course_bp.route('/delete/<int:id>', methods=['DELETE'])
 @jwt_required()
 @authorise_as_admin
